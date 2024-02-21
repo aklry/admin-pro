@@ -109,6 +109,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
         '#': fileURLToPath(new URL('./types', import.meta.url)),
       },
+      extensions: ['.js', '.ts', '.json', '.vue'],
     },
   }
 })
