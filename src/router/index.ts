@@ -18,9 +18,16 @@ const router = createRouter({
   routes,
 })
 
+const whiteList = ['/login', '/404']
+// @ts-ignore
 router.beforeEach((to, from, next) => {
   NProgress.start()
-  next()
+  const token = sessionStorage.getItem('user')
+  if (whiteList.includes(to.path) || token) {
+    next()
+  } else {
+    next('/login')
+  }
 })
 
 router.afterEach(() => {

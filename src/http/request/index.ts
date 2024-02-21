@@ -59,7 +59,7 @@ class RYRequest {
   }
 
   // 封装网络请求的方法
-  request<T = any>(config: RYRequestConfig<T>) {
+  request<T>(config: RYRequestConfig<T>) {
     if (config.interceptors?.requestSuccess) {
       // 单次请求的成功请求处理
       config = config.interceptors.requestSuccess(config)
