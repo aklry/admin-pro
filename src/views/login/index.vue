@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { User, Lock } from '@element-plus/icons-vue'
 import useUserStore from '@/store/user'
 import { useRouter } from 'vue-router'
+import type { ElForm, FormRules } from 'element-plus'
 
+const formRef = ref<InstanceType<typeof ElForm>>(null)
 const userInfo = reactive({
   username: '',
   password: '',
 })
-const rules = reactive({
+const rules = reactive<InstanceType<typeof FormRules>>({
   username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
 })
@@ -17,6 +19,7 @@ const rules = reactive({
 const userStore = useUserStore()
 const router = useRouter()
 const handleUserLogin = async () => {
+  await formRef.value?.validate()
   await userStore.userLoginAction(userInfo)
   await router.push('/')
 }
@@ -26,7 +29,7 @@ const handleUserLogin = async () => {
   <div class="login-container">
     <div class="login-form">
       <h1>企业级中后台管理系统</h1>
-      <el-form :model="userInfo" :rules="rules">
+      <el-form :model="userInfo" :rules="rules" ref="formRef">
         <el-form-item prop="username">
           <el-input
             v-model="userInfo.username"

@@ -19,7 +19,7 @@ const router = createRouter({
 })
 
 const whiteList = ['/login', '/404']
-// @ts-ignore
+// @ts-expect-error from is optional
 router.beforeEach((to, from, next) => {
   NProgress.start()
   const token = sessionStorage.getItem('user')
