@@ -3,7 +3,6 @@
 <template>
   <div class="home-container">
     <h2>home</h2>
-    <el-button>按钮</el-button>
   </div>
 </template>
 
