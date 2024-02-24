@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
 import { getProjectItem, getProjectList } from '@/api/project/project'
 import { IProjectListItemType } from '@/api/project/type'
 
@@ -31,9 +31,19 @@ const handleCurrentChange = (val: number) => {
 }
 
 const handleSearch = async () => {
-  const res = await getProjectItem(searchData.title)
-  tableData.value = res.data
+  if (searchData.title) {
+    const res = await getProjectItem(searchData.title)
+    tableData.value = res.data
+  }
 }
+watch(
+  () => searchData.title,
+  (val) => {
+    if (!val) {
+      fetchTableData(pageInfo.currentPage, pageInfo.pageSize)
+    }
+  },
+)
 </script>
 
 <template>
@@ -57,7 +67,6 @@ const handleSearch = async () => {
         :page-size="pageInfo.pageSize"
         layout="prev, pager, next, jumper"
         :total="pageInfo.total"
-        :page-sizes="[5, 10, 15, 20]"
         @current-change="handleCurrentChange"
       />
     </div>
