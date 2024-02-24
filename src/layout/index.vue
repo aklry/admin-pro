@@ -1,5 +1,14 @@
 <script setup lang="ts">
 import Header from './components/header.vue'
+import useUserStore from '@/store/user'
+import { storeToRefs } from 'pinia'
+
+const userStore = useUserStore()
+const { path } = storeToRefs(userStore)
+
+const handleSelect = (index: string) => {
+  userStore.setPath(index)
+}
 </script>
 
 <template>
@@ -11,10 +20,11 @@ import Header from './components/header.vue'
       <el-container>
         <el-aside width="200px">
           <el-menu
-            default-active="/"
+            :default-active="path"
             class="el-menu-vertical-demo"
             background-color="#545c64"
             router
+            @select="handleSelect"
           >
             <el-menu-item index="/">项目描述</el-menu-item>
             <el-menu-item index="/user">用户列表</el-menu-item>
