@@ -1,9 +1,113 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { IUserList } from '@/api/user/type'
+import { onMounted, reactive, watch } from 'vue'
+import { getUserList } from '@/api/user/user'
+import { getRoles } from '@/api/role/role'
+import { ref } from 'vue'
+import { IRoleList } from '@/api/role/type'
+interface ISearchData {
+  nickName: string
+  role: number
+}
+onMounted(() => {
+  fetchUserList()
+  fetchRoleList()
+})
+const userList = ref<IUserList[]>([])
+const searchData = reactive<ISearchData>({
+  nickName: '',
+  role: 0,
+})
+const roleList = ref<IRoleList[]>([])
+const fetchUserList = async () => {
+  const res = await getUserList()
+  userList.value = res.data
+}
+const fetchRoleList = async () => {
+  const res = await getRoles()
+  roleList.value = res.data
+}
+// 搜索
+const handleSearch = () => {
+  let res: IUserList[] = userList.value
+  if (searchData.role || searchData.nickName) {
+    if (searchData.nickName) {
+      res = res.filter((item) => item.nickName.includes(searchData.nickName))
+    }
+    if (searchData.role) {
+      res = searchData.nickName ? res : userList.value
+      res = res.filter((item) => {
+        return item.role.find((r) => r.role === searchData.role)
+      })
+    }
+  } else {
+    res = userList.value
+  }
+  userList.value = res
+}
+watch(
+  [() => searchData.nickName, () => searchData.role],
+  ([nickName, role]) => {
+    if (!nickName || !role) {
+      fetchUserList()
+    }
+  },
+)
+</script>
 
 <template>
   <div class="user-container">
-    <h3>user</h3>
+    <el-form :model="searchData" inline>
+      <el-form-item label="昵称">
+        <el-input v-model="searchData.nickName" />
+      </el-form-item>
+      <el-form-item label="权限" class="auth-container">
+        <el-select
+          v-model="searchData.role"
+          placeholder="请选择角色"
+          size="large"
+        >
+          <el-option label="全部" :value="0" />
+          <template v-for="role in roleList" :key="role.roleId">
+            <el-option :value="role.roleId" :label="role.roleName" />
+          </template>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="handleSearch">查询</el-button>
+      </el-form-item>
+    </el-form>
+    <el-table :data="userList">
+      <el-table-column prop="id" label="编号" />
+      <el-table-column prop="nickName" label="昵称" />
+      <el-table-column prop="role" label="权限">
+        <template #default="{ row }: { row: IUserList }">
+          <el-tag
+            v-for="r in row.role"
+            :key="r.role"
+            type="success"
+            size="small"
+            class="tag"
+          >
+            {{ r.roleName }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作">
+        <template #default>
+          <el-button type="primary" size="small">编辑</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.tag {
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+.auth-container {
+  width: 200px;
+}
+</style>
