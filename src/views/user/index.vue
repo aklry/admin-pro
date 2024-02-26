@@ -1,13 +1,19 @@
 <script setup lang="ts">
 import { IUserList } from '@/api/user/type'
 import { onMounted, reactive, watch } from 'vue'
-import { getUserList } from '@/api/user/user'
+import { getUserList, editUser } from '@/api/user/user'
 import { getRoles } from '@/api/role/role'
 import { ref } from 'vue'
 import { IRoleList } from '@/api/role/type'
+import { ElMessage } from 'element-plus'
 interface ISearchData {
   nickName: string
   role: number
+}
+interface IEditData {
+  id: number
+  nickName: string
+  role: number[]
 }
 onMounted(() => {
   fetchUserList()
@@ -53,6 +59,38 @@ watch(
     }
   },
 )
+
+const editData = reactive<IEditData>({
+  id: 0,
+  nickName: '',
+  role: [],
+})
+const dialogVisible = ref(false)
+
+const handleEdit = (row: IUserList) => {
+  dialogVisible.value = true
+  Object.assign(editData, {
+    ...row,
+    role: row.role.map((r) => r.role),
+  })
+}
+const handleConfirmEdit = async () => {
+  dialogVisible.value = false
+  const result = await editUser({
+    id: editData.id,
+    nickName: editData.nickName,
+    role: editData.role,
+  })
+  result.data.forEach((item) => {
+    const user = userList.value.find((u) => item.id === u.id)
+    if (user) {
+      user.nickName = item.nickName
+      user.role = item.role
+    }
+  })
+  await fetchUserList()
+  await ElMessage.success(result.message)
+}
 </script>
 
 <template>
@@ -94,11 +132,33 @@ watch(
         </template>
       </el-table-column>
       <el-table-column label="操作">
-        <template #default>
-          <el-button type="primary" size="small">编辑</el-button>
+        <template #default="{ row }">
+          <el-button type="primary" size="small" @click="handleEdit(row)">
+            编辑
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog v-model="dialogVisible" width="25%" title="编辑用户">
+      <el-form :model="editData">
+        <el-form-item label="昵称">
+          <el-input v-model="editData.nickName" />
+        </el-form-item>
+        <el-form-item label="角色">
+          <el-select v-model="editData.role" multiple>
+            <template v-for="role in roleList" :key="role.roleId">
+              <el-option :value="role.roleId" :label="role.roleName" />
+            </template>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="handleConfirmEdit">确 定</el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 

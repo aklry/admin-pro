@@ -1,5 +1,5 @@
 import RYRequest from '@/http'
-import { IUserList, loginRequest, loginResponse } from './type'
+import { IEditUser, IUserList, loginRequest, loginResponse } from './type'
 import { BaseResponse } from '@/http/request/type'
 
 export const userLogin = (data: loginRequest) =>
@@ -7,3 +7,9 @@ export const userLogin = (data: loginRequest) =>
 
 export const getUserList = () =>
   RYRequest.get<BaseResponse<IUserList[]>>({ url: '/getUserList' })
+
+export const editUser = (data: IEditUser) =>
+  RYRequest.post<BaseResponse<IUserList[]>>({
+    url: '/editUser',
+    data,
+  })

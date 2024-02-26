@@ -24,3 +24,9 @@ export interface IRole {
   role: number
   roleName: string
 }
+
+export interface IEditUser {
+  id: number
+  nickName: string
+  role: number[]
+}

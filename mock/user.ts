@@ -1,5 +1,44 @@
 import type { MockMethod } from 'vite-plugin-mock'
 
+const userList = [
+  {
+    id: 1,
+    nickName: '张三',
+    userName: '张三',
+    role: [
+      {
+        role: 1,
+        roleName: '管理员',
+      },
+      {
+        role: 2,
+        roleName: '普通用户',
+      },
+    ],
+  },
+  {
+    id: 2,
+    nickName: '李四',
+    userName: '李四',
+    role: [
+      {
+        role: 1,
+        roleName: '管理员',
+      },
+    ],
+  },
+  {
+    id: 3,
+    nickName: '王五',
+    userName: '王五',
+    role: [
+      {
+        role: 2,
+        roleName: '普通用户',
+      },
+    ],
+  },
+]
 export default [
   {
     url: '/mock/api/login',
@@ -46,45 +85,35 @@ export default [
       return {
         code: 0,
         message: 'success',
-        data: [
-          {
-            id: 1,
-            nickName: '张三',
-            userName: '张三',
-            role: [
-              {
-                role: 1,
-                roleName: '管理员',
-              },
-              {
-                role: 2,
-                roleName: '普通用户',
-              },
-            ],
-          },
-          {
-            id: 2,
-            nickName: '李四',
-            userName: '李四',
-            role: [
-              {
-                role: 1,
-                roleName: '管理员',
-              },
-            ],
-          },
-          {
-            id: 3,
-            nickName: '王五',
-            userName: '王五',
-            role: [
-              {
-                role: 2,
-                roleName: '普通用户',
-              },
-            ],
-          },
-        ],
+        data: userList,
+      }
+    },
+  },
+  {
+    url: '/mock/api/editUser',
+    method: 'post',
+    response: ({ body }) => {
+      const { id, nickName, role } = body
+      const user = userList.find((item) => item.id === Number(id))
+      if (user) {
+        user.nickName = nickName
+        user.role = role.map((item: number) => {
+          return {
+            role: item,
+            roleName: item === 1 ? '管理员' : '普通用户',
+          }
+        })
+      }
+      const newUserList = userList.map((item) => {
+        if (item.id === user?.id) {
+          return user
+        }
+        return item
+      })
+      return {
+        code: 0,
+        message: '修改成功',
+        data: newUserList,
       }
     },
   },
