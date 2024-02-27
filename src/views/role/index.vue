@@ -3,16 +3,26 @@ import { onMounted, ref } from 'vue'
 import { getRoles, addRole } from '@/api/role/role'
 import { IRoleList } from '@/api/role/type'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { useRouter } from 'vue-router'
+import useUserStore from '@/store/user'
 onMounted(() => {
   fetchRoleList()
 })
 const roleList = ref<IRoleList[]>([])
+const userStore = useUserStore()
 const fetchRoleList = async () => {
   const res = await getRoles()
   roleList.value = res.data
 }
+const router = useRouter()
 const handleEdit = (row: IRoleList) => {
-  console.log(row)
+  router.push({
+    name: 'Auth',
+    query: {
+      auth: row.authority,
+    },
+  })
+  userStore.setPath('/auth')
 }
 
 const handleAdd = () => {
@@ -41,7 +51,7 @@ const handleAdd = () => {
       <el-table-column label="操作">
         <template #default="{ row }">
           <el-button type="primary" @click="handleEdit(row)" size="small">
-            编辑
+            修改权限
           </el-button>
         </template>
       </el-table-column>
