@@ -37,6 +37,10 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       // 开启ElementPlus自动引入CSS
       ElementPlus({}),
       AutoImport({
+        imports: ['vue', 'vue-router', 'pinia'],
+        eslintrc: {
+          enabled: true,
+        },
         resolvers: [IconsResolver(), ElementPlusResolver()],
         dts: fileURLToPath(
           new URL('./types/auto-imports.d.ts', import.meta.url),
