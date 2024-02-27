@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from 'vue'
 import { getProjectItem, getProjectList } from '@/api/project/project'
 import { IProjectListItemType } from '@/api/project/type'
 

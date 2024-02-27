@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
 import { getRoles, addRole } from '@/api/role/role'
 import { IRoleList } from '@/api/role/type'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { useRouter } from 'vue-router'
 import useUserStore from '@/store/user'
 onMounted(() => {
   fetchRoleList()

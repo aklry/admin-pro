@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
 import { User, Lock } from '@element-plus/icons-vue'
 import useUserStore from '@/store/user'
-import { useRouter } from 'vue-router'
 import type { ElForm, FormRules } from 'element-plus'
 
 const formRef = ref<InstanceType<typeof ElForm>>(null)

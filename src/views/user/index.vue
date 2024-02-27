@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { IUserList } from '@/api/user/type'
-import { onMounted, reactive, watch } from 'vue'
 import { getUserList, editUser } from '@/api/user/user'
 import { getRoles } from '@/api/role/role'
-import { ref } from 'vue'
 import { IRoleList } from '@/api/role/type'
 import { ElMessage } from 'element-plus'
 interface ISearchData {

@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
 import { getAuthList } from '@/api/auth/auth'
 import { IAuth } from '@/api/auth/type'
-import { useRoute } from 'vue-router'
 import type { ElTree } from 'element-plus'
 
 onMounted(() => {
