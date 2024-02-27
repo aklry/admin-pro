@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { getProjectItem, getProjectList } from '@/api/project/project'
 import { IProjectListItemType } from '@/api/project/type'
+import { IPageInfo, ISearchData } from './type'
 
-const pageInfo = reactive({
+const pageInfo = reactive<IPageInfo>({
   currentPage: 1,
   pageSize: 5,
   total: 0,
 })
-const searchData = reactive({
+const searchData = reactive<ISearchData>({
   title: '',
   introduce: '',
 })

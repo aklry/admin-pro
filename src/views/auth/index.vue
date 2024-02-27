@@ -2,13 +2,14 @@
 import { getAuthList } from '@/api/auth/auth'
 import { IAuth } from '@/api/auth/type'
 import type { ElTree } from 'element-plus'
+import { useCompRef } from '@/hooks/useCompRef'
 
 onMounted(() => {
   fetchAuthList()
   route.query.auth && treeRef.value.setCheckedKeys(route.query.auth)
 })
 const authList = ref<IAuth[]>([])
-const treeRef = ref<InstanceType<typeof ElTree>>()
+const treeRef = useCompRef<typeof ElTree>()
 const route = useRoute()
 const fetchAuthList = async () => {
   const { data } = await getAuthList()

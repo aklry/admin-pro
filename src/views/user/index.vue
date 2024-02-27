@@ -1,18 +1,10 @@
 <script setup lang="ts">
 import { IUserList } from '@/api/user/type'
 import { getUserList, editUser } from '@/api/user/user'
+import type { ISearchData, IEditData } from './type'
 import { getRoles } from '@/api/role/role'
 import { IRoleList } from '@/api/role/type'
 import { ElMessage } from 'element-plus'
-interface ISearchData {
-  nickName: string
-  role: number
-}
-interface IEditData {
-  id: number
-  nickName: string
-  role: number[]
-}
 onMounted(() => {
   fetchUserList()
   fetchRoleList()

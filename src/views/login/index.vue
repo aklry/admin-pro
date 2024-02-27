@@ -2,9 +2,11 @@
 import { User, Lock } from '@element-plus/icons-vue'
 import useUserStore from '@/store/user'
 import type { ElForm, FormRules } from 'element-plus'
+import { IUserInfo } from '@/views/login/type'
+import { useCompRef } from '@/hooks/useCompRef'
 
-const formRef = ref<InstanceType<typeof ElForm>>(null)
-const userInfo = reactive({
+const formRef = useCompRef<typeof ElForm>()
+const userInfo = reactive<IUserInfo>({
   username: '',
   password: '',
 })
