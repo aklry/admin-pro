@@ -11,7 +11,7 @@ module.exports = {
   // 不同格式的文件指定自定义语法
   overrides: [
     {
-      files: ['**/*.(scss|css|vue|html)'],
+      files: ['**/*.(less|css|vue|html)'],
       customSyntax: 'postcss-less',
     },
     {
