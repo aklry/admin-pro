@@ -40,16 +40,20 @@ const activePath = route.path
 <style lang="less" scoped>
 .common-layout {
   height: 100vh;
+
   .el-container {
     height: 100%;
   }
+
   .el-aside {
     background-color: #545c64;
   }
 }
+
 .el-header {
   padding: 0;
 }
+
 .el-menu {
   border-right: none;
 }

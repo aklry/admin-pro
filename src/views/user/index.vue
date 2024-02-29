@@ -154,6 +154,7 @@ const handleConfirmEdit = async () => {
   margin-right: 5px;
   margin-bottom: 5px;
 }
+
 .auth-container {
   width: 200px;
 }

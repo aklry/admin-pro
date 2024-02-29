@@ -62,18 +62,21 @@ const handleUserLogin = async () => {
   align-items: center;
   height: 100vh;
   background-color: var(--ry-background-light);
+
   .login-form {
-    width: 400px;
     padding: 20px;
+    width: 400px;
     border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgb(0 0 0 / 10%);
+
     .login-btn {
       width: 100%;
     }
   }
+
   h1 {
-    text-align: center;
     margin-bottom: 20px;
+    text-align: center;
   }
 }
 </style>

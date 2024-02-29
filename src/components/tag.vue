@@ -33,14 +33,15 @@ const setTheme = () => {
 <style scoped lang="less">
 .tag-container {
   display: inline-block;
+
   .tag {
     padding: 5px 10px;
-    border-radius: 15px;
     margin-right: 5px;
     height: 24px;
-    line-height: 12px;
     font-size: 12px;
     color: #fff;
+    border-radius: 15px;
+    line-height: 12px;
   }
 }
 </style>

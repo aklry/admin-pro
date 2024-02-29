@@ -51,9 +51,11 @@ const logout = () => {
   width: 100%;
   height: 60px;
 }
+
 .setting {
   cursor: pointer;
 }
+
 .setting-header {
   display: flex;
   justify-content: space-between;
@@ -61,9 +63,11 @@ const logout = () => {
   height: 60px;
   color: var(--ry-color-black);
 }
+
 .out {
   padding: 15px;
   text-align: center;
+
   .el-button {
     width: 100%;
   }
