@@ -2,12 +2,10 @@
 import { getRoles, addRole } from '@/api/role/role'
 import { IRoleList } from '@/api/role/type'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import useUserStore from '@/store/user'
 onMounted(() => {
   fetchRoleList()
 })
 const roleList = ref<IRoleList[]>([])
-const userStore = useUserStore()
 const fetchRoleList = async () => {
   const res = await getRoles()
   roleList.value = res.data
@@ -20,7 +18,6 @@ const handleEdit = (row: IRoleList) => {
       auth: row.authority,
     },
   })
-  userStore.setPath('/auth')
 }
 
 const handleAdd = () => {
