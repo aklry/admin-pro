@@ -10,7 +10,6 @@ const useUserStore = defineStore('user', {
     accessToken: '',
     refreshToken: '',
     roles: [],
-    path: '/',
   }),
   actions: {
     async userLoginAction(data: loginRequest) {
@@ -24,13 +23,10 @@ const useUserStore = defineStore('user', {
         ElMessage.error(userLoginResult.message)
       }
     },
-    setPath(path: string) {
-      this.path = path
-    },
   },
   persist: {
     key: 'user',
-    paths: ['accessToken', 'path'],
+    paths: ['accessToken'],
     storage: sessionStorage,
   },
 })

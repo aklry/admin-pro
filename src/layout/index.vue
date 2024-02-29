@@ -1,14 +1,11 @@
 <script setup lang="ts">
 import Header from './components/header.vue'
-import useUserStore from '@/store/user'
-import { storeToRefs } from 'pinia'
-
-const userStore = useUserStore()
-const { path } = storeToRefs(userStore)
-
-const handleSelect = (index: string) => {
-  userStore.setPath(index)
-}
+const router = useRouter()
+const route = useRoute()
+const menuList = router.getRoutes().filter((route) => {
+  return route.meta.isShow
+})
+const activePath = route.path
 </script>
 
 <template>
@@ -20,16 +17,16 @@ const handleSelect = (index: string) => {
       <el-container>
         <el-aside width="200px">
           <el-menu
-            :default-active="path"
+            :default-active="activePath"
             class="el-menu-vertical-demo"
             background-color="#545c64"
             router
-            @select="handleSelect"
           >
-            <el-menu-item index="/">项目描述</el-menu-item>
-            <el-menu-item index="/user">用户列表</el-menu-item>
-            <el-menu-item index="role">角色列表</el-menu-item>
-            <el-menu-item index="/auth">权限列表</el-menu-item>
+            <template v-for="item in menuList" :key="item.name">
+              <el-menu-item :index="item.path">
+                {{ item.meta.title }}
+              </el-menu-item>
+            </template>
           </el-menu>
         </el-aside>
         <el-main>
