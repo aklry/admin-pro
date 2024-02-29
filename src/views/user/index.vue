@@ -110,15 +110,12 @@ const handleConfirmEdit = async () => {
       <el-table-column prop="nickName" label="昵称" />
       <el-table-column prop="role" label="权限">
         <template #default="{ row }: { row: IUserList }">
-          <el-tag
-            v-for="r in row.role"
-            :key="r.role"
-            type="success"
-            size="small"
-            class="tag"
-          >
-            {{ r.roleName }}
-          </el-tag>
+          <tag
+            v-for="role in row.role"
+            :key="role.role"
+            :text="role.roleName"
+            theme="#95d475"
+          />
         </template>
       </el-table-column>
       <el-table-column label="操作">
