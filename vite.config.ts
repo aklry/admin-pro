@@ -45,6 +45,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
         dts: fileURLToPath(
           new URL('./types/auto-imports.d.ts', import.meta.url),
         ),
+        dirs: ['src/components'],
       }),
       // 自动注册组件
       Components({
