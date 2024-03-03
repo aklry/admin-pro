@@ -1,20 +1,17 @@
 <script setup lang="ts">
 import { useSettingStore } from '@/store/setting'
-import useUserStore from '@/store/user'
+
 import Header from './components/header.vue'
 
 const router = useRouter()
+const route = useRoute()
 const routes = router.options.routes[0].children
 const menuList = routes?.filter((route) => {
   return route.meta!.isShow
 })
 const settingStore = useSettingStore()
-const userStore = useUserStore()
 
-const handleSelect = (path: string) => {
-  userStore.setPathAction(path)
-}
-const { path } = storeToRefs(userStore)
+const activePath = route.path.replace('/', '')
 </script>
 
 <template>
@@ -26,11 +23,10 @@ const { path } = storeToRefs(userStore)
       <el-container>
         <el-aside width="200px">
           <el-menu
-            :default-active="path"
+            :default-active="activePath"
             class="el-menu-vertical-demo"
             background-color="#545c64"
             router
-            @select="handleSelect"
           >
             <template v-for="item in menuList" :key="item.name">
               <template v-if="!item.children">
