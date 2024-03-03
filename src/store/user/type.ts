@@ -3,4 +3,5 @@ export interface IUserState {
   accessToken: string
   refreshToken: string
   roles: Array<string>
+  [key: string]: any
 }

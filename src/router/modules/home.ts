@@ -11,6 +11,7 @@ export default {
       meta: {
         title: '项目介绍',
         isShow: true,
+        parentRouter: 'Layout',
       },
     },
     {
@@ -20,6 +21,7 @@ export default {
       meta: {
         title: '用户列表',
         isShow: true,
+        parentRouter: 'Layout',
       },
     },
     {
@@ -29,6 +31,7 @@ export default {
       meta: {
         title: '角色列表',
         isShow: true,
+        parentRouter: 'Layout',
       },
     },
     {
@@ -38,6 +41,7 @@ export default {
       meta: {
         title: '权限列表',
         isShow: true,
+        parentRouter: 'Layout',
       },
     },
   ],
