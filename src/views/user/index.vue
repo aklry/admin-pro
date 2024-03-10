@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { IUserList } from '@/api/user/type'
-import { getUserList, editUser } from '@/api/user/user'
+import { getUserList, editUser, addUser, deleteUser } from '@/api/user/user'
 import type { ISearchData, IEditData } from './type'
 import { getRoles } from '@/api/role/role'
 import { IRoleList } from '@/api/role/type'
@@ -50,36 +50,68 @@ watch(
   },
 )
 
-const editData = reactive<IEditData>({
+const addOrEditData = reactive<IEditData>({
   id: 0,
   nickName: '',
   role: [],
 })
 const dialogVisible = ref(false)
-
-const handleEdit = (row: IUserList) => {
+const title = ref('')
+// 打开添加/编辑弹窗
+const handleAddOrEdit = (isAdd: number = 1, row: IUserList) => {
   dialogVisible.value = true
-  Object.assign(editData, {
-    ...row,
-    role: row.role.map((r) => r.role),
-  })
+  console.log(row)
+  if (isAdd === 0) {
+    title.value = '编辑用户'
+    Object.assign(addOrEditData, {
+      ...row,
+      role: row.role.map((r) => r.role),
+    })
+  } else {
+    title.value = '新增用户'
+    Object.assign(addOrEditData, {
+      nickName: '',
+      role: [],
+    })
+  }
 }
+
+// 确认添加/编辑
+
 const handleConfirmEdit = async () => {
   dialogVisible.value = false
-  const result = await editUser({
-    id: editData.id,
-    nickName: editData.nickName,
-    role: editData.role,
-  })
-  result.data.forEach((item) => {
-    const user = userList.value.find((u) => item.id === u.id)
-    if (user) {
-      user.nickName = item.nickName
-      user.role = item.role
-    }
-  })
-  await fetchUserList()
-  await ElMessage.success(result.message)
+  let result = null
+  if (addOrEditData.id > 0) {
+    result = await editUser({
+      id: addOrEditData.id,
+      nickName: addOrEditData.nickName,
+      role: addOrEditData.role,
+    })
+    result.data.forEach((item: IUserList) => {
+      const user = userList.value.find((u) => item.id === u.id)
+      if (user) {
+        user.nickName = item.nickName
+        user.role = item.role
+      }
+    })
+  } else {
+    // 新增
+    result = await addUser({
+      nickName: addOrEditData.nickName,
+      role: addOrEditData.role,
+    })
+    console.log(result)
+  }
+  if (result) {
+    await fetchUserList()
+    await ElMessage.success(result.message)
+  }
+}
+// 删除
+const handleDelete = async (id: number) => {
+  const deleteRes = await deleteUser(id)
+  userList.value = deleteRes.data
+  ElMessage.success(deleteRes.message)
 }
 </script>
 
@@ -104,6 +136,11 @@ const handleConfirmEdit = async () => {
       <el-form-item>
         <el-button type="primary" @click="handleSearch">查询</el-button>
       </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="handleAddOrEdit(1)">
+          新增用户
+        </el-button>
+      </el-form-item>
     </el-form>
     <el-table :data="userList">
       <el-table-column prop="id" label="编号" />
@@ -120,19 +157,26 @@ const handleConfirmEdit = async () => {
       </el-table-column>
       <el-table-column label="操作">
         <template #default="{ row }">
-          <el-button type="primary" size="small" @click="handleEdit(row)">
+          <el-button
+            type="primary"
+            size="small"
+            @click="handleAddOrEdit(0, row)"
+          >
             编辑
+          </el-button>
+          <el-button type="danger" size="small" @click="handleDelete(row.id)">
+            删除
           </el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog v-model="dialogVisible" width="25%" title="编辑用户">
-      <el-form :model="editData">
+    <el-dialog v-model="dialogVisible" width="25%" :title="title">
+      <el-form :model="addOrEditData">
         <el-form-item label="昵称">
-          <el-input v-model="editData.nickName" />
+          <el-input v-model="addOrEditData.nickName" />
         </el-form-item>
         <el-form-item label="角色">
-          <el-select v-model="editData.role" multiple>
+          <el-select v-model="addOrEditData.role" multiple>
             <template v-for="role in roleList" :key="role.roleId">
               <el-option :value="role.roleId" :label="role.roleName" />
             </template>

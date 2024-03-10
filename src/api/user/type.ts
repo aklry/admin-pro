@@ -30,3 +30,8 @@ export interface IEditUser {
   nickName: string
   role: number[]
 }
+
+export interface IAddUser {
+  nickName: string
+  role: IRole[]
+}

@@ -117,4 +117,54 @@ export default [
       }
     },
   },
+  {
+    url: '/mock/api/addUser',
+    method: 'post',
+    response: ({ body }) => {
+      const { nickName, role } = body
+      const user = userList.find((item) => item.nickName === nickName)
+      if (!user) {
+        const id = userList.length + 1
+        userList.push({
+          id,
+          nickName,
+          userName: nickName,
+          role: role.map((item: number) => ({
+            role: item,
+            roleName: item === 1 ? '管理员' : '普通用户',
+          })),
+        })
+        return {
+          code: 0,
+          message: '添加成功',
+          data: null,
+        }
+      } else {
+        return {
+          code: -1,
+          message: '该用户已存在',
+          data: null,
+        }
+      }
+    },
+  },
+  {
+    url: '/mock/api/deleteUser',
+    method: 'get',
+    response: ({ query }) => {
+      const { id } = query
+      let index = 0
+      if (id > 0) {
+        index = userList.findIndex((item) => item.id === Number(id))
+        if (index > -1) {
+          userList.splice(index, 1)
+        }
+      }
+      return {
+        code: 0,
+        message: '删除成功',
+        data: userList,
+      }
+    },
+  },
 ] as MockMethod[]
